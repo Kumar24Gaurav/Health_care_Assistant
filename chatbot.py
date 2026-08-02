@@ -5,7 +5,7 @@ from config import API_KEY
 client = Mistral(api_key=API_KEY)
 model = "mistral-small-latest"
 
-def generate_response(user_message):
+def generate_response(user_message, history=None):
 
     system_message = """
     you are an Medical expert assitant.
@@ -41,12 +41,21 @@ def generate_response(user_message):
         {
             "role":"system",
             "content": system_message
-        },
+        }
+    ]
+
+    # history message
+    for user, assistant in history:
+        messages.append({"role": "user", "content": user})
+        messages.append({"role": "assistant", "content": assistant})
+
+    # current message
+    messages.append(
         {
             "role":"user",
             "content": user_message
         }
-    ]
+    )
 
     stream = client.chat.stream(
         model=model, 
@@ -59,9 +68,9 @@ def generate_response(user_message):
     for chunk in stream:
         if chunk.data.choices:
             delta = chunk.data.choices[0].delta.content
-        if delta:
-            full_response+=delta
-            print(delta, end="", flush=True)
+            if delta:
+                full_response+=delta
+                print(delta, end="", flush=True)
     return full_response
 
 user_query = "i ate spicy chicken today after that i am feeling stomach ache"
