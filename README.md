@@ -176,11 +176,11 @@ http://127.0.0.1:7860
 
 ## Chat Conversation
 
-images\chat-01.png
+(images/chat-01.png)
 
-images\chat-02.png
+(images/chat-02.png)
 
-images\chat-03.png
+(images/chat-03.png)
 
 ---
 
