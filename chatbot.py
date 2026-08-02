@@ -73,6 +73,7 @@ def generate_response(user_message, history=None):
                 print(delta, end="", flush=True)
     return full_response
 
-user_query = "i ate spicy chicken today after that i am feeling stomach ache"
-generate_response(user_query)
+# testing query
+# user_query = "i ate spicy chicken today after that i am feeling stomach ache"
+# generate_response(user_query)
             
