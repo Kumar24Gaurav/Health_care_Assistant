@@ -6,7 +6,7 @@ client = Mistral(api_key=API_KEY)
 model = "mistral-small-latest"
 
 def generate_response(user_message, history=None):
-
+    print("history: ",history)
     system_message = """
     you are an Medical expert assitant.
 
@@ -45,9 +45,13 @@ def generate_response(user_message, history=None):
     ]
 
     # history message
-    for user, assistant in history:
-        messages.append({"role": "user", "content": user})
-        messages.append({"role": "assistant", "content": assistant})
+    for msg in history:
+        messages.append(
+            {
+                "role": msg["role"],
+                "content": msg["content"]
+            }
+        )
 
     # current message
     messages.append(
