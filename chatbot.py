@@ -6,7 +6,6 @@ client = Mistral(api_key=API_KEY)
 model = "mistral-small-latest"
 
 def generate_response(user_message, history=None):
-    print("history: ",history)
     system_message = """
     you are an Medical expert assitant.
 
