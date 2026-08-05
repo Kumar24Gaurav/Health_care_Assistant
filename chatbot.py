@@ -1,11 +1,25 @@
-from mistralai.client import Mistral
+try:
+    from mistralai.client import Mistral
+except ModuleNotFoundError:
+    Mistral = None
+
 from config import API_KEY
 
 
-client = Mistral(api_key=API_KEY)
+client = None
+if Mistral is not None and API_KEY:
+    client = Mistral(api_key=API_KEY)
+
 model = "mistral-small-latest"
 
+
 def generate_response(user_message, history=None):
+    if not API_KEY:
+        return "Please set the MISTRAL_API_KEY environment variable before using the assistant."
+
+    if client is None:
+        return "The Mistral SDK is not available in this environment. Install the project dependencies and try again."
+
     system_message = """
     you are an Medical expert assitant.
 
@@ -38,30 +52,46 @@ def generate_response(user_message, history=None):
 
     messages = [
         {
-            "role":"system",
+            "role": "system",
             "content": system_message
         }
     ]
 
+    history = history or []
+
     # history message
     for msg in history:
-        messages.append(
-            {
-                "role": msg["role"],
-                "content": msg["content"]
-            }
-        )
+        if isinstance(msg, dict):
+            messages.append(
+                {
+                    "role": msg["role"],
+                    "content": msg["content"]
+                }
+            )
+        elif isinstance(msg, tuple) and len(msg) == 2:
+            messages.append(
+                {
+                    "role": "user",
+                    "content": msg[0]
+                }
+            )
+            messages.append(
+                {
+                    "role": "assistant",
+                    "content": msg[1]
+                }
+            )
 
     # current message
     messages.append(
         {
-            "role":"user",
+            "role": "user",
             "content": user_message
         }
     )
 
     stream = client.chat.stream(
-        model=model, 
+        model=model,
         messages=messages,
         temperature=0
     )
@@ -72,11 +102,6 @@ def generate_response(user_message, history=None):
         if chunk.data.choices:
             delta = chunk.data.choices[0].delta.content
             if delta:
-                full_response+=delta
+                full_response += delta
                 print(delta, end="", flush=True)
     return full_response
-
-# testing query
-# user_query = "i ate spicy chicken today after that i am feeling stomach ache"
-# generate_response(user_query)
-            
