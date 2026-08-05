@@ -1,24 +1,22 @@
 # 🩺 Medical AI Assistant
 
-An AI-powered medical chatbot built using **Python**, **Gradio**, and **Mistral AI**. The chatbot provides general medical guidance, answers health-related questions, and encourages users to seek professional medical advice when symptoms appear serious.
+An AI-powered medical chatbot built with **Python**, **Streamlit**, and **Mistral AI**. The assistant gives general medical guidance, answers health-related questions, and reminds users to seek professional care for serious symptoms.
 
-> **Disclaimer:** This chatbot is intended for educational and informational purposes only. It is **not** a substitute for professional medical advice, diagnosis, or treatment.
+> **Disclaimer:** This chatbot is intended for educational and informational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment.
 
 ---
 
 # 📌 About the Project
 
-Medical AI Assistant is a conversational chatbot that leverages the **Mistral Large Language Model (LLM)** to answer medical-related queries.
+Medical AI Assistant is a conversational chatbot that uses the **Mistral LLM** to respond to medical queries. The app is now built as a **Streamlit web application** with a modern dark interface, sidebar samples, and a chat history experience.
 
-The chatbot uses a carefully designed **system prompt** to:
+The chatbot uses a medical-focused system prompt to:
 
-- Restrict responses to medical-related questions only.
+- Restrict responses to health-related questions only.
 - Provide general medical suggestions.
-- Recommend consulting a healthcare professional for serious symptoms.
-- Avoid generating misleading or fabricated medical information.
-- Refuse questions unrelated to the medical domain.
-
-The application features a simple and interactive user interface built with **Gradio**, making it easy for users to interact with the AI directly from their browser.
+- Encourage users to consult a healthcare professional for urgent symptoms.
+- Avoid making unreliable or fabricated medical claims.
+- Reject non-medical queries.
 
 ---
 
@@ -26,11 +24,11 @@ The application features a simple and interactive user interface built with **Gr
 
 - 💬 Conversational AI chatbot
 - 🩺 Medical-specific system prompt
-- 🚫 Rejects non-medical questions
-- ⚠️ Warns users to consult a doctor when necessary
-- 🌐 Interactive Gradio web interface
-- 🔐 Secure API key management using `.env`
-- ⚡ Real-time responses using Mistral AI API
+- 🚫 Rejects unrelated questions
+- ⚠️ Encourages doctor consultation for serious symptoms
+- 🌐 Interactive **Streamlit** web interface
+- 🔐 Secure API key management via `.env` and Streamlit secrets
+- ⚡ Real-time responses using the Mistral API
 
 ---
 
@@ -38,27 +36,24 @@ The application features a simple and interactive user interface built with **Gr
 
 | Technology | Purpose |
 |------------|---------|
-| Python | Backend development |
-| Gradio | User Interface |
-| Mistral AI API | Large Language Model |
-| python-dotenv | Environment variable management |
+| Python | Backend logic |
+| Streamlit | User interface |
+| Mistral AI API | Language model provider |
+| python-dotenv | Local environment variable loading |
 | UV | Dependency management |
 
 ---
 
 # 📂 Project Structure
 
-```
+```text
 medical-ai-assistant/
-│
-├── app.py              # Gradio UI
-├── chatbot.py          # Mistral API integration
-├── config.py           # API key configuration
-├── prompts.py          # System prompt
-├── .env                # API Key (Not pushed to GitHub)
-├── pyproject.toml
-├── uv.lock
-├── requirements.txt    # (Optional)
+├── app.py              # Streamlit UI
+├── chatbot.py          # Mistral API integration and response generation
+├── config.py           # API key loading and environment setup
+├── .env                # Local environment variables (not pushed to GitHub)
+├── pyproject.toml      # Project dependencies
+├── uv.lock             # Locked dependency versions
 └── README.md
 ```
 
@@ -70,21 +65,18 @@ medical-ai-assistant/
 
 ```bash
 git clone https://github.com/yourusername/medical-ai-assistant.git
-
 cd medical-ai-assistant
 ```
 
 ---
 
-## 2. Create a virtual environment
+## 2. Create and activate a virtual environment
 
-Using **uv**
+Using **uv**:
 
 ```bash
 uv venv
 ```
-
-Activate it
 
 ### Windows
 
@@ -106,51 +98,69 @@ source .venv/bin/activate
 uv sync
 ```
 
-Or install manually
+If you are installing manually, use:
 
 ```bash
-uv add gradio mistralai python-dotenv
+uv add streamlit mistralai python-dotenv
+```
+
+Or with `pip`:
+
+```bash
+python -m pip install streamlit mistralai python-dotenv
 ```
 
 ---
 
-## 4. Create a `.env` file
+## 4. Configure the API key
+
+Create a `.env` file in the project root:
 
 ```env
 MISTRAL_API_KEY=your_api_key_here
 ```
 
+For Streamlit Cloud or deployed environments, you can also store the same key under **Settings → Secrets** as:
+
+```toml
+[MISTRAL_API_KEY]
+```
+
+or by using the secret key name expected by the app configuration.
+
 ---
 
-## 5. Get a Mistral API Key
+## 5. Get a Mistral API key
 
 1. Create an account on Mistral AI.
-2. Generate an API Key.
-3. Copy the key into the `.env` file.
+2. Generate an API key.
+3. Paste it into your `.env` file or Streamlit secrets.
 
 ---
 
 ## 6. Run the application
 
 ```bash
-uv run app.py
+streamlit run app.py
 ```
 
-Open the browser at
+Then open the browser at:
 
+```text
+http://localhost:8501
 ```
-http://127.0.0.1:7860
-```
+
+If the app is launched in a different port due to environment configuration, Streamlit will show the exact URL in the terminal.
 
 ---
 
 # 🧠 How It Works
 
-```
+```text
                 User
                   │
                   ▼
-            Gradio Interface
+            Streamlit Interface
                   │
                   ▼
        generate_response()
@@ -165,14 +175,12 @@ http://127.0.0.1:7860
          AI Generated Response
                   │
                   ▼
-          Displayed in Gradio
+        Displayed in Streamlit Chat
 ```
 
 ---
 
 # 📸 Screenshots
-
----
 
 ## Chat Conversation
 
@@ -181,8 +189,8 @@ http://127.0.0.1:7860
 ![Chat 2](images/chat-02.png)
 
 ![Chat 3](images/chat-03.png)
----
 
+---
 
 # 📝 Example Queries
 
@@ -194,15 +202,13 @@ http://127.0.0.1:7860
 - What is a normal blood sugar level?
 - Why do I have stomach pain?
 
----
-
 ### Serious Symptoms
 
 - I have severe chest pain.
 - I fell from my bike and cannot move my arm.
 - I have difficulty breathing.
 
-The chatbot recommends seeking immediate medical attention when appropriate.
+The assistant recommends seeking immediate medical attention when appropriate.
 
 ---
 
@@ -212,7 +218,7 @@ The chatbot intentionally refuses unrelated questions.
 
 Example:
 
-```
+```text
 User:
 Who is the Prime Minister of India?
 
@@ -248,8 +254,6 @@ The chatbot follows several safety rules:
 - Multi-language support
 
 ---
-
-
 
 # 👨‍💻 Author
 
