@@ -1,4 +1,5 @@
 # 🩺 Medical AI Assistant
+## live: https://kumar24gaurav-health-care-assistant-app-e90psv.streamlit.app
 
 An AI-powered medical chatbot built with **Python**, **Streamlit**, and **Mistral AI**. The assistant gives general medical guidance, answers health-related questions, and reminds users to seek professional care for serious symptoms.
 
